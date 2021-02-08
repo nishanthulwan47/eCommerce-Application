@@ -24,6 +24,8 @@ public class  UserController {
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+
+
 	@GetMapping("/id/{id}")
 	public ResponseEntity<User> findById(@PathVariable Long id) {
 		return ResponseEntity.of(userRepository.findById(id));
@@ -43,12 +45,14 @@ public class  UserController {
 		cartRepository.save(cart);
 		user.setCart(cart);
 		if (createUserRequest.getPassword().length() < 7 ||
-		!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword())) {
+		!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword()) ) {
 			return ResponseEntity.badRequest().build();
 		}
 		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
 		userRepository.save(user);
 		return ResponseEntity.ok(user);
 	}
+
+
 	
 }
