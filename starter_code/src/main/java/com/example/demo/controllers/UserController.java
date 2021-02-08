@@ -44,11 +44,13 @@ public class  UserController {
 		Cart cart = new Cart();
 		cartRepository.save(cart);
 		user.setCart(cart);
+		String password = bCryptPasswordEncoder.encode(createUserRequest.getPassword());
 		if (createUserRequest.getPassword().length() < 7 ||
-		!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword()) ) {
+		!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword()) ||
+		!bCryptPasswordEncoder.matches(createUserRequest.getConfirmPassword(), password)) {
 			return ResponseEntity.badRequest().build();
 		}
-		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
+		user.setPassword(password);
 		userRepository.save(user);
 		return ResponseEntity.ok(user);
 	}
